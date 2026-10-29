@@ -1,0 +1,8 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kambac-borrowing-react-frontend
+    ports:
+      - "3001:80"

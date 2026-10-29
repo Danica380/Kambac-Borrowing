@@ -1,0 +1,224 @@
+{{> head}}
+<body class="app-page equipment-page">
+  <div class="app-layout">
+    {{> sidebar}}
+    <main class="app-main">
+      <header class="page-header inventory-header">
+        <div>
+          <p class="eyebrow">Equipment</p>
+          <h1>Inventory</h1>
+          <p class="muted-text inventory-subtitle">Registered equipment and quantity on hand.</p>
+        </div>
+        <div class="inventory-header-actions">
+          <a class="secondary-button add-equipment-link" href="/equipment/new">Add equipment</a>
+          <button class="primary-button borrow-equipment-trigger" type="button" aria-haspopup="dialog" aria-controls="borrow-equipment-dialog" data-open-borrow-dialog>Borrow Equipment</button>
+        </div>
+      </header>
+
+      <dialog class="borrow-dialog" id="borrow-equipment-dialog" aria-labelledby="borrow-dialog-title" aria-describedby="borrow-dialog-description">
+        <div class="borrow-dialog-card">
+          <header class="borrow-dialog-header">
+            <div>
+              <p class="eyebrow">Equipment inventory</p>
+              <h2 id="borrow-dialog-title">Borrow Equipment</h2>
+              <p class="muted-text" id="borrow-dialog-description">Pumili ng available na kagamitan at ilagay ang detalye ng paghiram.</p>
+            </div>
+            <button class="borrow-dialog-close" type="button" aria-label="Isara" data-close-borrow-dialog>&times;</button>
+          </header>
+
+          {{#if borrowableEquipment.length}}
+            <form class="borrow-modal-form" method="POST" action="/equipment/{{borrowEquipmentId}}/borrow" data-borrow-modal-form>
+              <label class="borrow-field">
+                <span>Equipment name</span>
+                <select name="equipmentId" required data-borrow-equipment-select>
+                  {{#each borrowableEquipment}}
+                    <option value="{{id}}" data-available="{{availableQuantity}}" {{#if @first}}selected{{/if}}>{{name}} — {{category}} ({{availableQuantity}} available)</option>
+                  {{/each}}
+                </select>
+                <small data-borrow-availability>{{firstBorrowableEquipment.availableQuantity}} available</small>
+              </label>
+              <label class="borrow-field">
+                <span>Borrower's full name</span>
+                <input type="text" name="borrowerName" maxlength="120" autocomplete="name" required>
+              </label>
+              <label class="borrow-field">
+                <span>Quantity</span>
+                <input type="number" name="quantity" min="1" max="{{firstBorrowableEquipment.availableQuantity}}" value="1" step="1" required data-borrow-quantity>
+              </label>
+              <label class="borrow-field">
+                <span>Date borrowed</span>
+                <input type="date" value="{{todayDate}}" readonly>
+              </label>
+              <label class="borrow-field borrow-field-wide">
+                <span>Expected return date</span>
+                <input type="date" name="dueDate" min="{{todayDate}}" required>
+              </label>
+              <label class="borrow-field borrow-field-wide">
+                <span>Purpose / notes <small>(optional)</small></span>
+                <textarea name="purpose" rows="3" maxlength="2000"></textarea>
+              </label>
+              <footer class="borrow-modal-actions">
+                <button class="secondary-button" type="button" data-close-borrow-dialog>Cancel</button>
+                <button class="primary-button" type="submit">Submit borrowing</button>
+              </footer>
+            </form>
+          {{else}}
+            <p class="borrow-modal-empty">Walang available na kagamitan na maaaring hiramin sa ngayon.</p>
+            <footer class="borrow-modal-actions">
+              <button class="secondary-button" type="button" data-close-borrow-dialog>Close</button>
+            </footer>
+          {{/if}}
+        </div>
+      </dialog>
+
+      {{#each success_msg}}
+        <p class="notice notice-success" role="status">{{this}}</p>
+      {{/each}}
+      {{#each error_msg}}
+        <p class="notice notice-error" role="alert">{{this}}</p>
+      {{/each}}
+
+      <section class="inventory-stats" aria-label="Inventory summary">
+        <a class="stat-card" href="/equipment">
+          <span class="stat-label">Active items</span>
+          <strong>{{counts.total}}</strong>
+        </a>
+        <a class="stat-card" href="/equipment?availability=available">
+          <span class="stat-label">Available units</span>
+          <strong>{{counts.available}}</strong>
+        </a>
+        <a class="stat-card" href="/equipment?availability=borrowed">
+          <span class="stat-label">Borrowed units</span>
+          <strong>{{counts.borrowed}}</strong>
+        </a>
+        <a class="stat-card" href="/equipment?availability=archived">
+          <span class="stat-label">Archived items</span>
+          <strong>{{counts.archived}}</strong>
+        </a>
+      </section>
+
+      <section class="inventory-panel" aria-labelledby="inventory-list-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="inventory-list-title">Equipment items</h2>
+            <p class="muted-text">{{pagination.total}} item(s) in this view</p>
+          </div>
+        </div>
+
+        <form class="inventory-filters" method="GET" action="/equipment">
+          <label class="filter-search">
+            <span class="visually-hidden">Search by equipment name</span>
+            <input type="search" name="search" value="{{filters.search}}" placeholder="Search equipment name">
+          </label>
+          <label>
+            <span class="visually-hidden">Category</span>
+            <select name="category">
+              <option value="">All categories</option>
+              {{#each categories}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+              {{/each}}
+            </select>
+          </label>
+          <label>
+            <span class="visually-hidden">Condition</span>
+            <select name="condition">
+              <option value="">All conditions</option>
+              {{#each conditions}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+          <label>
+            <span class="visually-hidden">Availability</span>
+            <select name="availability">
+              <option value="">Active inventory</option>
+              <option value="available" {{#if filters.isAvailable}}selected{{/if}}>Available</option>
+              <option value="borrowed" {{#if filters.isBorrowed}}selected{{/if}}>Borrowed</option>
+              <option value="unavailable" {{#if filters.isUnavailable}}selected{{/if}}>Unavailable</option>
+              <option value="archived" {{#if filters.isArchived}}selected{{/if}}>Archived</option>
+            </select>
+          </label>
+          <label>
+            <span class="visually-hidden">Sort records by</span>
+            <select name="sort">
+              <option value="createdAt" {{#if filters.sortCreated}}selected{{/if}}>Date added</option>
+              <option value="updatedAt" {{#if filters.sortUpdated}}selected{{/if}}>Recently updated</option>
+              <option value="name" {{#if filters.sortName}}selected{{/if}}>Name</option>
+              <option value="category" {{#if filters.sortCategory}}selected{{/if}}>Category</option>
+              <option value="totalQuantity" {{#if filters.sortTotal}}selected{{/if}}>Total quantity</option>
+              <option value="availableQuantity" {{#if filters.sortAvailable}}selected{{/if}}>Available quantity</option>
+            </select>
+          </label>
+          <label>
+            <span class="visually-hidden">Sort direction</span>
+            <select name="direction">
+              <option value="desc" {{#if filters.descending}}selected{{/if}}>Descending</option>
+              <option value="asc" {{#if filters.ascending}}selected{{/if}}>Ascending</option>
+            </select>
+          </label>
+          <button class="filter-button" type="submit">Apply</button>
+          <a class="clear-filters" href="/equipment">Clear</a>
+        </form>
+
+        {{#if items.length}}
+          <div class="table-scroll">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th scope="col">Photo</th>
+                  <th scope="col">Equipment</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Condition</th>
+                  <th scope="col">Availability</th>
+                  <th scope="col">Date added</th>
+                  <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each items}}
+                  <tr>
+                  <td>
+                    {{#if photoPath}}
+                      <img class="equipment-thumbnail" src="{{photoPath}}" alt="Photo of {{name}}" loading="lazy">
+                    {{else}}
+                      <span class="equipment-thumbnail-placeholder" aria-label="No photo available">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                      </span>
+                    {{/if}}
+                  </td>
+                  <td><a class="table-primary-link" href="/equipment/{{id}}">{{name}}</a></td>
+                    <td>{{category}}</td>
+                    <td><span class="quantity-cell">{{availableQuantity}} / {{totalQuantity}}</span><span class="table-secondary">{{borrowedQuantity}} borrowed</span></td>
+                    <td>{{conditionLabel}}</td>
+                    <td><span class="status-badge">{{statusLabel}}</span></td>
+                    <td>{{createdDate}}</td>
+                    <td><a class="row-action" href="/equipment/{{id}}">View</a></td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span class="muted-text">Showing {{pagination.start}}–{{pagination.end}} of {{pagination.total}}</span>
+            <div class="pagination-actions">
+              {{#if pagination.previousUrl}}<a class="secondary-button" href="{{pagination.previousUrl}}">Previous</a>{{/if}}
+              <span class="page-count">Page {{pagination.page}} of {{pagination.totalPages}}</span>
+              {{#if pagination.nextUrl}}<a class="secondary-button" href="{{pagination.nextUrl}}">Next</a>{{/if}}
+            </div>
+          </div>
+        {{else}}
+          <div class="empty-state">
+            <span class="empty-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 4.5v9L12 21l-9-4.5v-9L12 3Z"/><path d="m3.5 7.7 8.5 4.4 8.5-4.4M12 12.1V21"/></svg>
+            </span>
+            <h3>{{emptyTitle}}</h3>
+            <p class="muted-text">{{emptyMessage}}</p>
+            {{#if emptyIsUnfiltered}}<a class="primary-button" href="/equipment/new">Add the first item</a>{{else}}<a class="secondary-button" href="/equipment">Clear filters</a>{{/if}}
+          </div>
+        {{/if}}
+      </section>
+    </main>
+  </div>
+{{> footer}}

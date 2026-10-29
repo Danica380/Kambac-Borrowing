@@ -1,0 +1,77 @@
+{{> head }}
+<body class="landing-page">
+  <header class="landing-header">
+    <div class="landing-header-inner">
+      <a class="landing-brand" href="/" aria-label="KAMBAC home">
+        <span class="landing-brand-mark">K</span>
+        <span>KAMBAC<span class="landing-brand-period">.</span></span>
+      </a>
+      <nav class="landing-nav" aria-label="Main navigation">
+        <a href="/login">Member sign in</a>
+        <a class="landing-register" href="/register">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="landing-main">
+    <section class="landing-hero" aria-labelledby="landing-title">
+      <div class="landing-copy">
+        <p class="landing-eyebrow"><span aria-hidden="true"></span>KAMBAC Community Portal</p>
+        <h1 id="landing-title">Working together.<br><span>Growing stronger.</span></h1>
+        <p class="landing-description">
+          Welcome to the KAMBAC Integrated Management System — a shared space for our
+          agrarian beneficiary farmer community to stay connected and manage equipment borrowing.
+        </p>
+        <div class="landing-actions">
+          <a class="landing-primary-action" href="/login">
+            Sign in to your account
+            <span aria-hidden="true">→</span>
+          </a>
+          <a class="landing-text-action" href="/register">
+            New to KAMBAC? Register <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <p class="landing-access-note">
+          <span aria-hidden="true">✓</span> For members and authorized administrators
+        </p>
+      </div>
+
+      <div class="landing-art" aria-label="Illustration of a sunrise over community farmland" role="img">
+        <div class="landing-art-glow"></div>
+        <div class="landing-art-scene">
+          <svg viewBox="0 0 320 320" role="presentation" aria-hidden="true">
+            <defs>
+              <clipPath id="farm-scene-clip">
+                <circle cx="160" cy="160" r="141" />
+              </clipPath>
+              <linearGradient id="farm-sky" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#111b31" />
+                <stop offset="1" stop-color="#20314a" />
+              </linearGradient>
+              <linearGradient id="farm-field" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#183a38" />
+                <stop offset="1" stop-color="#101c2c" />
+              </linearGradient>
+            </defs>
+            <g clip-path="url(#farm-scene-clip)">
+              <rect width="320" height="320" fill="url(#farm-sky)" />
+              <circle cx="203" cy="107" r="32" fill="#efbd4d" />
+              <path d="M0 191 Q85 154 160 160 Q238 145 320 180 V320 H0Z" fill="#263951" />
+              <path d="M0 214 Q86 178 164 184 Q245 170 320 202 V320 H0Z" fill="url(#farm-field)" />
+              <path d="M42 320 126 186M94 320 145 184M151 320 162 184M209 320 181 184M269 320 201 185M315 320 218 188"
+                fill="none" stroke="#b48b3b" stroke-opacity=".46" stroke-width="1.5" />
+              <path d="M0 250 Q87 215 160 220 Q242 206 320 238M0 282 Q88 245 160 250 Q242 237 320 268"
+                fill="none" stroke="#45705c" stroke-opacity=".5" stroke-width="1.2" />
+            </g>
+            <circle cx="160" cy="160" r="141" fill="none" stroke="#fff" stroke-opacity=".14" />
+          </svg>
+        </div>
+        <div class="landing-community-tag"><span aria-hidden="true">‹</span> Community first</div>
+        <div class="landing-art-caption">
+          <span class="landing-caption-dot" aria-hidden="true"></span>
+          <span><strong>Rooted in community</strong><small>Building a connected future together</small></span>
+        </div>
+      </div>
+    </section>
+  </main>
+{{> footer }}

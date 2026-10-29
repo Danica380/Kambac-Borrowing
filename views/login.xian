@@ -1,0 +1,16 @@
+{{> head}}
+<body class="public-page">
+  <main class="public-card">
+    <p class="eyebrow">KAMBAC</p>
+    <form class="auth-form" method="POST" action="/login">
+      <h1>Login</h1>
+      <label class="field-label" for="email">Email</label>
+      <input id="email" type="email" name="email" placeholder="Email" required />
+      <label class="field-label" for="password">Password</label>
+      <input id="password" type="password" name="password" placeholder="Password" required />
+      <button class="primary-button" type="submit">Login</button>
+      <a class="secondary-link" href="/register">Don't have an account? Register</a>
+      <a class="secondary-link" href="/">Back to landing page</a>
+    </form>
+  </main>
+{{> footer }}

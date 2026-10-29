@@ -1,0 +1,14 @@
+{{> head}}
+<body class="app-page">
+  <div class="app-layout">
+    {{> sidebar}}
+    <main class="app-main">
+      <section class="inventory-panel empty-state">
+        <span class="empty-mark" aria-hidden="true">!</span>
+        <h1>{{title}}</h1>
+        <p class="muted-text">{{message}}</p>
+        <a class="secondary-button" href="/equipment">Return to inventory</a>
+      </section>
+    </main>
+  </div>
+{{> footer}}

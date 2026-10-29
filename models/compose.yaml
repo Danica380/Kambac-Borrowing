@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: kambac-borrowing-app
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: Kambac-Borrowing
+      DB_USER: kambac_user
+      DB_PASSWORD: kambac_pass
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: kambac-borrowing-db
+    environment:
+      MYSQL_DATABASE: Kambac-Borrowing
+      MYSQL_USER: kambac_user
+      MYSQL_PASSWORD: kambac_pass
+      MYSQL_ROOT_PASSWORD: kambac_root_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - kambac_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pkambac_root_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  kambac_mysql_data:

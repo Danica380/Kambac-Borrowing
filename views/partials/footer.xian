@@ -1,0 +1,8 @@
+<button class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+  <span class="theme-toggle-label">Light mode</span>
+</button>
+<footer class="site-footer">
+  &copy; 2026 KAMBAC Integrated Management System
+</footer>
+</body>
+</html>

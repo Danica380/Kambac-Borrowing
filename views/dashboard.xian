@@ -1,0 +1,63 @@
+{{> head}}
+<body class="app-page dashboard-page">
+  <div class="app-layout">
+    {{> sidebar}}
+
+    <main class="app-main">
+      <header class="page-header dashboard-header">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h1>Dashboard</h1>
+          <p class="dashboard-intro">A quick look at your equipment inventory.</p>
+        </div>
+      </header>
+
+      <section class="inventory-stats dashboard-stats" aria-label="Equipment summary">
+        <a class="stat-card dashboard-stat" href="/equipment">
+          <span class="stat-label">Active items</span>
+          <strong>{{counts.total}}</strong>
+          <span class="dashboard-stat-note"><span class="live-dot" aria-hidden="true"></span>Current inventory</span>
+          <span class="dashboard-stat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 4.5v9L12 21l-9-4.5v-9L12 3Z"/><path d="m3.5 7.7 8.5 4.4 8.5-4.4M12 12.1V21"/></svg>
+          </span>
+        </a>
+        <a class="stat-card dashboard-stat" href="/equipment?availability=available">
+          <span class="stat-label">Available units</span>
+          <strong>{{counts.available}}</strong>
+          <span class="dashboard-stat-note">Ready to borrow</span>
+          <span class="dashboard-stat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+          </span>
+        </a>
+        <a class="stat-card dashboard-stat" href="/equipment?availability=borrowed">
+          <span class="stat-label">Borrowed units</span>
+          <strong>{{counts.borrowed}}</strong>
+          <span class="dashboard-stat-note">Currently on loan</span>
+          <span class="dashboard-stat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11l-3-3"/><path d="M17 17H6l3 3"/><path d="M18 7a7 7 0 0 1 1 9M6 17a7 7 0 0 1-1-9"/></svg>
+          </span>
+        </a>
+        <a class="stat-card dashboard-stat" href="/equipment?availability=archived">
+          <span class="stat-label">Archived items</span>
+          <strong>{{counts.archived}}</strong>
+          <span class="dashboard-stat-note">Inactive records</span>
+          <span class="dashboard-stat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM2 4h20v3H2z"/><path d="M10 11h4"/></svg>
+          </span>
+        </a>
+      </section>
+
+      <section class="module-card dashboard-module" aria-labelledby="equipment-title">
+        <div class="module-card-heading">
+          <span class="module-mark" aria-hidden="true">E</span>
+          <div>
+            <h2 id="equipment-title">Equipment</h2>
+            <p class="muted-text">Browse and manage registered equipment.</p>
+          </div>
+        </div>
+        <p class="module-notice">Manage agricultural equipment, check availability, and keep borrowing and return records up to date.</p>
+        <a class="primary-link dashboard-action" href="/equipment">Open equipment inventory</a>
+      </section>
+    </main>
+  </div>
+{{> footer }}

@@ -1,0 +1,78 @@
+﻿# Include the standalone Laravel stack so the root Compose commands manage both apps.
+include:
+  - path: ./laravel-demo/compose.yaml
+
+services:
+  # 1. React Frontend (Port 3000)
+  frontend:
+    build:
+      context: ./node-frontend
+      dockerfile: Dockerfile
+    container_name: kambac-borrowing-react-frontend
+    restart: always
+    ports:
+      - "3000:80"
+
+  # 2. Kambac-Borrowing Node.js App (Port 3002)
+  app:
+    build: .
+    container_name: kambac-borrowing-app
+    restart: always
+    ports:
+      - "3002:3000"
+    environment:
+      PORT: 3000
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_NAME: Kambac-Borrowing
+      DB_USER: kambac_user
+      DB_PASSWORD: kambac_pass
+    depends_on:
+      database:
+        condition: service_healthy
+
+  # 3. MySQL Database Server (Port 3307)
+  database:
+    image: mysql:8.0
+    container_name: kambac-borrowing-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: Kambac-Borrowing
+      MYSQL_USER: kambac_user
+      MYSQL_PASSWORD: kambac_pass
+      MYSQL_ROOT_PASSWORD: kambac_root_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - kambac_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pkambac_root_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # 4. Custom PHP App (Port 8080)
+  php-app:
+    build: ./php
+    container_name: kambac-php-app
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+
+  # 5. phpMyAdmin (Port 8081)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: kambac-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: kambac_root_pass
+    depends_on:
+      - database
+
+volumes:
+  kambac_mysql_data:

@@ -1,0 +1,15 @@
+services:
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: pma-dev
+    environment:
+      PMA_HOST: kambac-borrowing-db
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    networks:
+      - kambac-borrowing_default
+
+networks:
+  kambac-borrowing_default:
+    external: true

@@ -1,0 +1,27 @@
+<aside class="app-sidebar" aria-label="Main navigation">
+  <a class="brand" href="/dashboard" aria-label="KAMBAC dashboard">
+    <span class="brand-mark" aria-hidden="true">K</span>
+    <span class="brand-copy">
+      <span class="brand-name">KAMBAC</span>
+      <span class="brand-caption">Integrated Management System</span>
+    </span>
+  </a>
+
+  <nav class="sidebar-nav" aria-label="Modules">
+    <a class="nav-item {{#unless equipmentPage}}nav-item-active{{/unless}}" href="/dashboard" {{#unless equipmentPage}}aria-current="page"{{/unless}}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a class="nav-item {{#if equipmentPage}}nav-item-active{{/if}}" href="/equipment" {{#if equipmentPage}}aria-current="page"{{/if}}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 4.5v9L12 21l-9-4.5v-9L12 3Z"/><path d="m3.5 7.7 8.5 4.4 8.5-4.4M12 12.1V21"/></svg>
+      <span>Equipment</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a class="logout-link" href="/logout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>
+      <span>Logout</span>
+    </a>
+  </div>
+</aside>
